@@ -4,8 +4,13 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { useDispatch, useSelector } from "react-redux"
+import { setAuth,  authSelector, setUser } from "@/lib/store/authSlice"
+import { getUser } from "@/lib/actions/client"
+import Profile from "./auth/profile"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -17,10 +22,28 @@ const navigation = [
 export function Navigation() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const user = useSelector(authSelector)
+  const dispatch = useDispatch()
+  const {isSuccess, isFetched, isPending, data, refetch} = useQuery({
+    queryKey: ['user', user],
+    queryFn: () => getUser(user!.id),
+    retry: 2
+  })
+
+  useEffect(() => {
+    if (user) {
+      refetch()
+    }
+    if(isSuccess) {
+      dispatch(setUser(data.data.user))
+    }
+  }, [])
+
 
   return (
     <>
       <nav className="glass-card fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
+      {isPending && <small>fetching..</small>}
         <div className="flex items-center gap-1 p-1">
           <Link href="/" className="flex items-center gap-2 px-3 py-2">
             <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-cyan-500 rounded-lg flex items-center justify-center">
@@ -45,16 +68,26 @@ export function Navigation() {
           </div>
 
           <div className="flex items-center gap-2 ml-4 pl-4 border-l border-white/10">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button
-              size="sm"
-              className="bg-gradient-to-r from-violet-500 to-cyan-500 hover:from-violet-600 hover:to-cyan-600"
-              asChild
-            >
-              <Link href="/signup">Sign Up</Link>
-            </Button>
+            {isSuccess && isFetched ? (
+                <Profile user={data.user} />
+              ) : (
+                <>
+                    <Button variant="ghost" size="sm" className="flex-1" asChild>
+                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                      Login
+                    </Link>
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="flex-1 bg-gradient-to-r from-violet-500 to-cyan-500 hover:from-violet-600 hover:to-cyan-600"
+                    asChild
+                  >
+                    <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+                      Sign Up
+                    </Link>
+                  </Button>
+                </>
+              )}
           </div>
         </div>
       </nav>
@@ -89,20 +122,26 @@ export function Navigation() {
               </Link>
             ))}
             <div className="border-t border-white/10 pt-2 mt-4 flex gap-2">
-              <Button variant="ghost" size="sm" className="flex-1" asChild>
-                <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                  Login
-                </Link>
-              </Button>
-              <Button
-                size="sm"
-                className="flex-1 bg-gradient-to-r from-violet-500 to-cyan-500 hover:from-violet-600 hover:to-cyan-600"
-                asChild
-              >
-                <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
-                  Sign Up
-                </Link>
-              </Button>
+              {isSuccess && isFetched ? (
+                <Profile user={data.user} />
+              ) : (
+                <>
+                    <Button variant="ghost" size="sm" className="flex-1" asChild>
+                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                      Login
+                    </Link>
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="flex-1 bg-gradient-to-r from-violet-500 to-cyan-500 hover:from-violet-600 hover:to-cyan-600"
+                    asChild
+                  >
+                    <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
+                      Sign Up
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         )}

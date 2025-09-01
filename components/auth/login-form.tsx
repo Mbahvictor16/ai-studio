@@ -8,6 +8,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"
+import { useMutation } from "@tanstack/react-query"
+import { loginUser } from "@/lib/actions/client"
+import { useDispatch } from "react-redux"
+import { setAuth } from "@/lib/store/authSlice"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 export function LoginForm() {
   const [formData, setFormData] = useState({
@@ -15,8 +21,27 @@ export function LoginForm() {
     password: "",
   })
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const dispatch = useDispatch()
+  const router = useRouter()
+
+  const {isError, isPending, mutate} = useMutation({
+    mutationFn: ({ email, password }: {email: string, password: string}) => loginUser({ email, password }),
+    onError: (error: any) => {
+      toast('Error', {
+        description: error.response.data.message,
+        style: {
+          background: "red",
+          border: '1px solid red',
+          color: 'white'
+        }
+      }) 
+    },
+    onSuccess: (data) => {
+      dispatch(setAuth(data.data))
+      router.push('/')
+    }
+  })
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -39,13 +64,10 @@ export function LoginForm() {
     e.preventDefault()
     if (!validateForm()) return
 
-    setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsLoading(false)
-
-    // Handle successful login here
-    console.log("Login successful:", formData)
+    mutate({
+      email: formData.email,
+      password: formData.password
+    })
   }
 
   const handleInputChange = (field: string, value: string) => {
@@ -61,7 +83,7 @@ export function LoginForm() {
         <h1 className="text-3xl font-display font-bold gradient-text mb-2">Welcome Back</h1>
         <p className="text-white/70">Sign in to your AI Studio account</p>
       </div>
-
+      {isError && <p className="text-red-400 text-sm">{errors.email}</p>}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="email" className="text-white/90">
@@ -76,7 +98,7 @@ export function LoginForm() {
               onChange={(e) => handleInputChange("email", e.target.value)}
               className="glass pl-10 border-white/20 focus:border-violet-400 text-white placeholder:text-white/50"
               placeholder="Enter your email"
-              disabled={isLoading}
+              disabled={isPending}
             />
           </div>
           {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
@@ -95,13 +117,13 @@ export function LoginForm() {
               onChange={(e) => handleInputChange("password", e.target.value)}
               className="glass pl-10 pr-10 border-white/20 focus:border-violet-400 text-white placeholder:text-white/50"
               placeholder="Enter your password"
-              disabled={isLoading}
+              disabled={isPending}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-white/80 transition-colors"
-              disabled={isLoading}
+              disabled={isPending}
             >
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
@@ -121,10 +143,10 @@ export function LoginForm() {
 
         <Button
           type="submit"
-          disabled={isLoading}
+          disabled={isPending}
           className="w-full bg-gradient-to-r from-violet-500 to-cyan-500 hover:from-violet-600 hover:to-cyan-600 transition-all duration-300 transform hover:scale-105"
         >
-          {isLoading ? "Signing in..." : "Sign In"}
+          {isPending ? "Signing in..." : "Sign In"}
         </Button>
       </form>
 

@@ -4,9 +4,12 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Sparkles, Wand2, Settings } from "lucide-react"
+import { useSelector } from "react-redux"
+import {authSelector} from '../../lib/store/authSlice'
+import {useRouter} from 'next/navigation'
 
 interface PromptInputProps {
-  onGenerate: (prompt: string, settings: GenerationSettings) => void
+  onGenerate: (prompt: string /*settings: GenerationSettings*/) => void
   isGenerating: boolean
   placeholder: string
   type: "image" | "video"
@@ -28,10 +31,16 @@ export function PromptInput({ onGenerate, isGenerating, placeholder, type }: Pro
     quality: "high",
     count: 4,
   })
+  const token = useSelector(authSelector)
+  const router = useRouter()
 
   const handleGenerate = () => {
+    if (!token) {
+      router.push('/login')
+      return
+    }
     if (prompt.trim()) {
-      onGenerate(prompt, settings)
+      onGenerate(prompt)
     }
   }
 

@@ -9,25 +9,37 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { PasswordStrength } from "./password-strength"
 import { Eye, EyeOff, Mail, Lock, User, Check } from "lucide-react"
+import { useMutation } from "@tanstack/react-query"
+import { useDispatch } from "react-redux"
+import { setAuth } from "@/lib/store/authSlice"
+import { signupUser } from "@/lib/actions/client"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 export function SignupForm() {
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
   })
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [agreedToTerms, setAgreedToTerms] = useState(false)
+  const dispatch = useDispatch()
+  const router = useRouter()
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required"
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "firstName is required"
+    }
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "lastName is required"
     }
 
     if (!formData.email) {
@@ -56,17 +68,29 @@ export function SignupForm() {
     return Object.keys(newErrors).length === 0
   }
 
+  const { isError, isPending, mutate, data } = useMutation({
+    mutationFn: (formData: Record<string, string>) => signupUser(formData),
+    onSuccess: (response: any) => {
+      dispatch(setAuth(response.data))
+      router.push('/')
+    },
+    onError: (error: any) => {
+      toast('Error', {
+        description: error.response.data.message,
+        style: {
+          background: "red",
+          border: '1px solid red',
+          color: 'white'
+        }
+      }) 
+    }
+  })
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validateForm()) return
 
-    setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsLoading(false)
-
-    // Handle successful signup here
-    console.log("Signup successful:", formData)
+    mutate(formData)
   }
 
   const handleInputChange = (field: string, value: string) => {
@@ -82,22 +106,41 @@ export function SignupForm() {
         <h1 className="text-3xl font-display font-bold gradient-text mb-2">Create Account</h1>
         <p className="text-white/70">Join AI Studio and start creating</p>
       </div>
-
+      <div className="mb-4">{isError}</div>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="name" className="text-white/90">
-            Full Name
+            First Name
           </Label>
           <div className="relative">
             <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50" />
             <Input
               id="name"
               type="text"
-              value={formData.name}
-              onChange={(e) => handleInputChange("name", e.target.value)}
+              value={formData.firstName}
+              onChange={(e) => handleInputChange("firstName", e.target.value)}
               className="glass pl-10 border-white/20 focus:border-violet-400 text-white placeholder:text-white/50"
               placeholder="Enter your full name"
-              disabled={isLoading}
+              disabled={isPending}
+            />
+          </div>
+          {errors.name && <p className="text-red-400 text-sm">{errors.name}</p>}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="name" className="text-white/90">
+            Last Name
+          </Label>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/50" />
+            <Input
+              id="name"
+              type="text"
+              value={formData.lastName}
+              onChange={(e) => handleInputChange("lastName", e.target.value)}
+              className="glass pl-10 border-white/20 focus:border-violet-400 text-white placeholder:text-white/50"
+              placeholder="Last name"
+              disabled={isPending}
             />
           </div>
           {errors.name && <p className="text-red-400 text-sm">{errors.name}</p>}
@@ -116,7 +159,7 @@ export function SignupForm() {
               onChange={(e) => handleInputChange("email", e.target.value)}
               className="glass pl-10 border-white/20 focus:border-violet-400 text-white placeholder:text-white/50"
               placeholder="Enter your email"
-              disabled={isLoading}
+              disabled={isPending}
             />
           </div>
           {errors.email && <p className="text-red-400 text-sm">{errors.email}</p>}
@@ -135,13 +178,13 @@ export function SignupForm() {
               onChange={(e) => handleInputChange("password", e.target.value)}
               className="glass pl-10 pr-10 border-white/20 focus:border-violet-400 text-white placeholder:text-white/50"
               placeholder="Create a strong password"
-              disabled={isLoading}
+              disabled={isPending}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-white/80 transition-colors"
-              disabled={isLoading}
+              disabled={isPending}
             >
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
@@ -163,13 +206,13 @@ export function SignupForm() {
               onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
               className="glass pl-10 pr-10 border-white/20 focus:border-violet-400 text-white placeholder:text-white/50"
               placeholder="Confirm your password"
-              disabled={isLoading}
+              disabled={isPending}
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50 hover:text-white/80 transition-colors"
-              disabled={isLoading}
+              disabled={isPending}
             >
               {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
@@ -192,7 +235,7 @@ export function SignupForm() {
                 }
               }}
               className="mt-0.5 rounded border-white/20 bg-transparent"
-              disabled={isLoading}
+              disabled={isPending}
             />
             <span>
               I agree to the{" "}
@@ -210,10 +253,10 @@ export function SignupForm() {
 
         <Button
           type="submit"
-          disabled={isLoading}
+          disabled={isPending}
           className="w-full bg-gradient-to-r from-violet-500 to-cyan-500 hover:from-violet-600 hover:to-cyan-600 transition-all duration-300 transform hover:scale-105"
         >
-          {isLoading ? "Creating Account..." : "Create Account"}
+          {isPending ? "Creating Account..." : "Create Account"}
         </Button>
       </form>
 
@@ -226,16 +269,16 @@ export function SignupForm() {
         </p>
       </div>
 
-      <div className="mt-6 relative">
+      {/* <div className="mt-6 relative">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-white/20" />
         </div>
         <div className="relative flex justify-center text-sm">
           <span className="px-2 bg-transparent text-white/50">Or continue with</span>
         </div>
-      </div>
+      </div> */}
 
-      <div className="mt-6 grid grid-cols-2 gap-3">
+      {/* <div className="mt-6 grid grid-cols-2 gap-3">
         <Button
           variant="outline"
           className="glass border-white/20 hover:bg-white/10 transition-all duration-300 bg-transparent"
@@ -269,7 +312,7 @@ export function SignupForm() {
           </svg>
           GitHub
         </Button>
-      </div>
+      </div> */}
     </div>
   )
 }

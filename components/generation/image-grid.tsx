@@ -52,12 +52,12 @@ export function ImageGrid({ images, isLoading, onLike, onDownload, onShare }: Im
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {images.map((image) => (
-            <div key={image.id} className="glass-card p-2 group hover:bg-white/10 transition-all duration-300">
+          {images.map((image, id) => (
+            <div key={id} className="glass-card p-2 group hover:bg-white/10 transition-all duration-300">
               <div className="relative aspect-square rounded-lg overflow-hidden mb-3">
                 <img
-                  src={image.url || "/placeholder.svg"}
-                  alt={image.prompt}
+                  src={`data:image/jpeg;charset=utf-8;base64,${image.url}`}
+                  alt={""}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   loading="lazy"
                 />
@@ -67,7 +67,7 @@ export function ImageGrid({ images, isLoading, onLike, onDownload, onShare }: Im
                     size="sm"
                     variant="ghost"
                     className="w-8 h-8 p-0 bg-black/50 hover:bg-black/70"
-                    onClick={() => setSelectedImage(image.id)}
+                    // onClick={() => setSelectedImage(image.id)}
                   >
                     <Maximize2 className="w-4 h-4 text-white" />
                   </Button>
@@ -75,15 +75,15 @@ export function ImageGrid({ images, isLoading, onLike, onDownload, onShare }: Im
               </div>
 
               <div className="space-y-2">
-                <p className="text-sm text-white/80 line-clamp-2">{image.prompt}</p>
+                {/* <p className="text-sm text-white/80 line-clamp-2">{image.prompt}</p> */}
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-white/50">{image.timestamp.toLocaleDateString()}</span>
+                  {/* <span className="text-xs text-white/50">{image.timestamp.toLocaleDateString()}</span> */}
                   <div className="flex items-center gap-1">
                     <Button
                       size="sm"
                       variant="ghost"
                       className="w-8 h-8 p-0 hover:bg-white/10"
-                      onClick={() => onLike(image.id)}
+                      // onClick={() => onLike(image.id)}
                     >
                       <Heart
                         className={`w-4 h-4 ${
@@ -95,7 +95,7 @@ export function ImageGrid({ images, isLoading, onLike, onDownload, onShare }: Im
                       size="sm"
                       variant="ghost"
                       className="w-8 h-8 p-0 hover:bg-white/10"
-                      onClick={() => onShare(image.id)}
+                      // onClick={() => onShare(image.id)}
                     >
                       <Share2 className="w-4 h-4 text-white/60" />
                     </Button>
@@ -103,7 +103,7 @@ export function ImageGrid({ images, isLoading, onLike, onDownload, onShare }: Im
                       size="sm"
                       variant="ghost"
                       className="w-8 h-8 p-0 hover:bg-white/10"
-                      onClick={() => onDownload(image.id)}
+                      // onClick={() => onDownload(image.id)}
                     >
                       <Download className="w-4 h-4 text-white/60" />
                     </Button>

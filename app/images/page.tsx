@@ -4,6 +4,9 @@ import { useState } from "react"
 import { Navigation } from "@/components/navigation"
 import { PromptInput } from "@/components/generation/prompt-input"
 import { ImageGrid } from "@/components/generation/image-grid"
+import { useMutation } from "@tanstack/react-query"
+import { generateImage } from "@/lib/actions/client"
+import { set } from "date-fns"
 
 interface GeneratedImage {
   id: string
@@ -16,24 +19,29 @@ interface GeneratedImage {
 export default function ImagesPage() {
   const [images, setImages] = useState<GeneratedImage[]>([])
   const [isGenerating, setIsGenerating] = useState(false)
+  const {mutate} = useMutation({
+    mutationFn: ({prompt}: {prompt: string}) => generateImage({prompt}),
+    onSettled: () => {
+      setIsGenerating(false)
+    },
+    onMutate: () => {
+      setIsGenerating(true)
+    },
+    onSuccess: (response) => {
+      setImages(response.data.images)
+      console.log(response.data.images)
+    },
+    onError: () => {
 
-  const handleGenerate = async (prompt: string, settings: any) => {
-    setIsGenerating(true)
+    }
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 3000))
+  })
 
-    // Generate mock images
-    const newImages: GeneratedImage[] = Array.from({ length: settings.count }, (_, i) => ({
-      id: `img-${Date.now()}-${i}`,
-      url: `/placeholder.svg?height=512&width=512&query=${encodeURIComponent(prompt)}`,
-      prompt,
-      timestamp: new Date(),
-      liked: false,
-    }))
-
-    setImages((prev) => [...newImages, ...prev])
-    setIsGenerating(false)
+  const handleGenerate = (prompt: string) => {
+    console.log('Generating')
+    mutate({
+      prompt
+    })
   }
 
   const handleLike = (id: string) => {

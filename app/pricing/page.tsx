@@ -9,121 +9,28 @@ import { PricingToggle } from "@/components/pricing/pricing-toggle"
 import { FAQSection } from "@/components/pricing/faq-section"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageCircle } from "lucide-react"
-
-const monthlyPlans = [
-  {
-    id: "free",
-    name: "Free",
-    description: "Perfect for trying out AI Studio",
-    price: 0,
-    period: "month" as const,
-    features: [
-      "10 image generations per month",
-      "Standard quality output",
-      "Basic style options",
-      "Personal use license",
-      "Community support",
-    ],
-    limitations: ["No video generation", "No API access", "Watermarked outputs"],
-    buttonText: "Get Started Free",
-    buttonVariant: "outline" as const,
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    description: "For creators and professionals",
-    price: 29,
-    period: "month" as const,
-    features: [
-      "500 image generations per month",
-      "50 video generations per month",
-      "High-quality output (4K)",
-      "All style options and filters",
-      "Commercial use license",
-      "Priority processing",
-      "Email support",
-      "API access (10,000 requests/month)",
-    ],
-    popular: true,
-    buttonText: "Start Pro Trial",
-    buttonVariant: "default" as const,
-  },
-  {
-    id: "business",
-    name: "Business",
-    description: "For teams and growing businesses",
-    price: 99,
-    period: "month" as const,
-    features: [
-      "2,000 image generations per month",
-      "200 video generations per month",
-      "Ultra HD quality output",
-      "Advanced AI models",
-      "Team collaboration tools",
-      "Brand kit integration",
-      "Priority support",
-      "API access (50,000 requests/month)",
-      "Custom integrations",
-      "Usage analytics",
-    ],
-    buttonText: "Start Business Trial",
-    buttonVariant: "default" as const,
-  },
-  {
-    id: "enterprise",
-    name: "Enterprise",
-    description: "Custom solutions for large organizations",
-    price: 499,
-    period: "month" as const,
-    features: [
-      "Unlimited generations",
-      "Custom AI model training",
-      "Dedicated infrastructure",
-      "White-label solutions",
-      "Advanced security & compliance",
-      "Dedicated account manager",
-      "24/7 phone support",
-      "Custom API limits",
-      "On-premise deployment options",
-      "SLA guarantees",
-    ],
-    enterprise: true,
-    buttonText: "Contact Sales",
-    buttonVariant: "default" as const,
-  },
-]
-
-const yearlyPlans = monthlyPlans.map((plan) => ({
-  ...plan,
-  period: "year" as const,
-  originalPrice: plan.price * 12,
-  price: Math.round(plan.price * 12 * 0.8), // 20% discount
-}))
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { getPricing } from "@/lib/actions/client"
 
 export default function PricingPage() {
   const [isYearly, setIsYearly] = useState(false)
-  const [isLoading, setIsLoading] = useState<string | null>(null)
+  const {data, isLoading, isError, isSuccess} = useQuery({
+    queryKey: ['plans'],
+    queryFn: getPricing
+  })
+  const {mutate, isPending} = useMutation({
+    mutationKey: ['subscribe'],
+    mutationFn: async () => {},
+    onError: () => {},
+    onSuccess: () => {}
+  })
 
-  const plans = isYearly ? yearlyPlans : monthlyPlans
+  // const plans = data && isYearly ? data.yearly : data.monthly
 
   const handleSubscribe = async (planId: string) => {
-    setIsLoading(planId)
+    console.log('Finish')
+    // mutate({})
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-
-    if (planId === "free") {
-      // Redirect to signup
-      window.location.href = "/signup"
-    } else if (planId === "enterprise") {
-      // Open contact form or redirect to contact page
-      window.location.href = "mailto:sales@aistudio.com"
-    } else {
-      // Redirect to payment flow
-      console.log(`Subscribing to ${planId}`)
-    }
-
-    setIsLoading(null)
   }
 
   return (
@@ -143,8 +50,8 @@ export default function PricingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-            {plans.map((plan) => (
-              <PricingCard key={plan.id} plan={plan} onSubscribe={handleSubscribe} isLoading={isLoading === plan.id} />
+            {isSuccess && data.plans.monthly.map((plan: any) => (
+              <PricingCard key={plan.id} plan={plan} onSubscribe={handleSubscribe} isLoading={true} />
             ))}
           </div>
 
