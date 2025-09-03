@@ -1,8 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import store from '.'
 type User = {
     id: string,
-    fullName: string,
+    firstName: string,
+    lastName: string,
     email: string
 }
 
@@ -10,6 +11,7 @@ type AuthState = {
     user: null | User
     token: string | null
 }
+
 const initialState: AuthState = {
     user: null,
     token: null
@@ -24,7 +26,6 @@ const authSlice = createSlice({
             state.user = action.payload.user
             localStorage.setItem('user', JSON.stringify(action.payload.user))
             localStorage.setItem('token', JSON.stringify(action.payload.token))
-            console.log(state.user, action.payload)
         },
         clearAuth: (state) => {
             state.token = null
@@ -32,12 +33,11 @@ const authSlice = createSlice({
         },
         setToken: (state, action) => {
             state.token = action.payload.token
-
+            localStorage.setItem('token', JSON.stringify(action.payload.token))
         },
         setUser: (state, action) => {
             state.user = action.payload.user
-
-            console.log(action.payload)
+            localStorage.setItem('user', JSON.stringify(action.payload.user))
         }
     }
 })

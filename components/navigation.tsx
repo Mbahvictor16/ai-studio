@@ -23,10 +23,10 @@ const navigation = [
 export function Navigation() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const {isAuthenticated, user} = useAuth()
+  const {isAuthenticated, auth} = useAuth()
   const {isSuccess, isFetched, isPending, data,} = useQuery({
-    queryKey: ['user', user],
-    queryFn: () => getUser(user!.id),
+    queryKey: ['user', auth.user],
+    queryFn: () => getUser(auth.user.id!),
     retry: 2,
     enabled: !!isAuthenticated
   })

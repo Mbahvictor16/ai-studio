@@ -6,22 +6,32 @@ import {useEffect, useState} from 'react'
 export function useAuth() {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const dispatch = useDispatch()
-    const user = useSelector(authSelector)
+    const auth = {
+        user: {
+            id: null
+        },
+        token: null
+    }
 
     useEffect(() => {
         const token = localStorage.getItem('token')
         const user = localStorage.getItem('user')
 
-        if (token && user) {
+        if (user) {
             setIsAuthenticated(true)
             dispatch(setUser(JSON.parse(user)))
+            auth.user = JSON.parse(user)
+        }
+        
+        if(token) {
             dispatch(setToken(JSON.parse(token)))
+            auth.token = JSON.parse(token)
         }
     
     }, [])
 
     return {
         isAuthenticated,
-        user
+        auth
     }
 }
