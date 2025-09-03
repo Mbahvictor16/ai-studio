@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { setAuth,  authSelector, setUser } from "@/lib/store/authSlice"
 import { getUser } from "@/lib/actions/client"
 import Profile from "./auth/profile"
+import { useAuth } from "@/hooks/use-auth"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -22,28 +23,18 @@ const navigation = [
 export function Navigation() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const user = useSelector(authSelector)
-  const dispatch = useDispatch()
-  const {isSuccess, isFetched, isPending, data, refetch} = useQuery({
+  const {isAuthenticated, user} = useAuth()
+  const {isSuccess, isFetched, isPending, data,} = useQuery({
     queryKey: ['user', user],
     queryFn: () => getUser(user!.id),
-    retry: 2
+    retry: 2,
+    enabled: !!isAuthenticated
   })
-
-  useEffect(() => {
-    if (user) {
-      refetch()
-    }
-    if(isSuccess) {
-      dispatch(setUser(data.data.user))
-    }
-  }, [])
 
 
   return (
     <>
       <nav className="glass-card fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
-      {isPending && <small>fetching..</small>}
         <div className="flex items-center gap-1 p-1">
           <Link href="/" className="flex items-center gap-2 px-3 py-2">
             <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-cyan-500 rounded-lg flex items-center justify-center">
