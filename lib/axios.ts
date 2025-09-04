@@ -4,7 +4,7 @@ import { refresh } from './actions/client'
 import { setToken } from './store/authSlice'
 
 export const api = axios.create({
-    baseURL: 'http://localhost:8787',
+    baseURL: 'https://backend.mbahvictor16.workers.dev',
     headers: { 'Content-Type': 'application/json', },
     withCredentials: true
 })
@@ -23,11 +23,11 @@ export const withAxios = async (request: any) => {
         response => response,
         async (err) => {
             const prevRequest = err?.config
-            console.log(prevRequest)
+
             if (err.response.status === 401) {
                 // prevRequest.sent = true
                 const res = await refresh()
-                store.dispatch(setToken(res.data))
+                store.dispatch(setToken(res.data.token))
                 console.log(res.data)
                 const token = res.data.token
                 prevRequest.headers.Authorization = `Bearer ${token}`

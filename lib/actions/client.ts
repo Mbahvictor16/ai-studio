@@ -2,16 +2,19 @@ import axios from "axios";
 import { api, withAxios } from "../axios";
 
 const noInterceptor = axios.create({
-    baseURL: 'http://localhost:8787',
+    baseURL: 'https://backend.mbahvictor16.workers.dev',
     headers: { "Content-Type": 'application/json' },
     withCredentials: true
 })
 
 export async function refresh() {
-    const res = await noInterceptor.get('/auth/token')
+    console.log('refreshing')
+    const res = await api.get('/auth/token')
     if (!res.data) {
+        console.log('rejected')
         return Promise.reject(res)
     }
+    console.log('resolved',res.data)
     return res.data
 }
 
@@ -26,7 +29,6 @@ export async function loginUser({ email, password }: { email: string, password: 
 }
 
 export async function signupUser(data: Record<string, string>) {
-
     const res = await noInterceptor.post('/users/create', { ...data })
     if (!res.data) {
         return Promise.reject(res)

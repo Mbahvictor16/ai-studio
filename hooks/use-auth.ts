@@ -2,16 +2,18 @@ import { authSelector, setToken, setUser } from '@/lib/store/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {useEffect, useState} from 'react'
+import { useRouter } from 'next/navigation'
 
 export function useAuth() {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const dispatch = useDispatch()
-    const auth = {
+    const router = useRouter()
+    const [auth, setAuth] = useState({
         user: {
             id: null
         },
         token: null
-    }
+    })
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -20,12 +22,14 @@ export function useAuth() {
         if (user) {
             setIsAuthenticated(true)
             dispatch(setUser(JSON.parse(user)))
-            auth.user = JSON.parse(user)
+            setAuth((prevAuth) => ({...prevAuth, user: JSON.parse(user)}))
+        } else {
+            router.push('/login')
         }
         
         if(token) {
             dispatch(setToken(JSON.parse(token)))
-            auth.token = JSON.parse(token)
+            setAuth((prevAuth) => ({...prevAuth, token: JSON.parse(token)}))
         }
     
     }, [])
