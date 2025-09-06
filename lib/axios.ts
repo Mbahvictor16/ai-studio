@@ -26,11 +26,12 @@ export const withAxios = async (request: any) => {
 
             if (err.response.status === 401) {
                 // prevRequest.sent = true
-                const res = await refresh()
+                const storeToken = store.getState().auth.token
+                const res = await refresh(storeToken as string)
                 store.dispatch(setToken(res.data.token))
                 console.log(res.data)
-                const token = res.data.token
-                prevRequest.headers.Authorization = `Bearer ${token}`
+                const newToken = res.data.token
+                prevRequest.headers.Authorization = `Bearer ${newToken}`
                 return api(prevRequest)
             }
             return Promise.reject(err)

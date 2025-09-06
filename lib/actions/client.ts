@@ -7,9 +7,8 @@ const noInterceptor = axios.create({
     withCredentials: true
 })
 
-export async function refresh() {
-    console.log('refreshing')
-    const res = await api.get('/auth/token')
+export async function refresh(token: string) {
+    const res = await api.post('/auth/token', { token })
     if (!res.data) {
         console.log('rejected')
         return Promise.reject(res)

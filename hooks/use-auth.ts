@@ -23,8 +23,6 @@ export function useAuth() {
             setIsAuthenticated(true)
             dispatch(setUser(JSON.parse(user)))
             setAuth((prevAuth) => ({...prevAuth, user: JSON.parse(user)}))
-        } else {
-            router.push('/login')
         }
         
         if(token) {
