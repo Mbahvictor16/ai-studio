@@ -7,8 +7,6 @@ import { cn } from "@/lib/utils"
 import { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { useDispatch, useSelector } from "react-redux"
-import { setAuth,  authSelector, setUser } from "@/lib/store/authSlice"
 import { getUser } from "@/lib/actions/client"
 import Profile from "./auth/profile"
 import { useAuth } from "@/hooks/use-auth"
@@ -63,7 +61,7 @@ export function Navigation() {
                 <Profile user={data.user} />
               ) : (
                 <>
-                    <Button variant="ghost" size="sm" className="flex-1" asChild>
+                    <Button variant="ghost" size="sm" className="flex-1 text-white" asChild>
                     <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
                       Login
                     </Link>
@@ -117,7 +115,7 @@ export function Navigation() {
                 <Profile user={data.user} />
               ) : (
                 <>
-                    <Button variant="ghost" size="sm" className="flex-1" asChild>
+                    <Button variant="ghost" size="sm" className="flex-1 text-white" asChild>
                     <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
                       Login
                     </Link>

@@ -10,21 +10,17 @@ const noInterceptor = axios.create({
 export async function refresh(token: string) {
     const res = await api.post('/auth/token', { token })
     if (!res.data) {
-        console.log('rejected')
         return Promise.reject(res)
     }
-    console.log('resolved',res.data)
     return res.data
 }
 
 export async function loginUser({ email, password }: { email: string, password: string }) {
-
     const res = await noInterceptor.post('/auth/login', { email, password })
     if (!res.data) {
         return Promise.reject(res)
     }
     return res.data
-
 }
 
 export async function signupUser(data: Record<string, string>) {
@@ -37,7 +33,6 @@ export async function signupUser(data: Record<string, string>) {
 
 
 export async function getUser(id: string) {
-    console.log('fetching')
     const controller = new AbortController()
     const response = await withAxios(api.get(`/users/${id}`, { signal: controller.signal }))
     if (!response.data) {
@@ -57,7 +52,6 @@ export async function generateVideo({ image, prompt }: { image: string; prompt: 
 }
 
 export async function generateImage({ prompt }: { prompt: string }) {
-    console.log('Image function')
     const controller = new AbortController()
     const response = await withAxios(api.post('/images/generate', { prompt }, { signal: controller.signal }))
     console.log()
@@ -69,11 +63,10 @@ export async function generateImage({ prompt }: { prompt: string }) {
 
 export async function getPricing() {
     const controller = new AbortController()
-    const response = await withAxios(api.get('/plans/pricing', { signal: controller.signal }))
+    const response = await axios.get('/plans/pricing', { signal: controller.signal })
     if (!response.data) {
         return Promise.reject(response)
     }
-    console.log(response.data.data)
     return response.data.data
 }
 
