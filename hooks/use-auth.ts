@@ -1,13 +1,10 @@
-import { authSelector, setToken, setUser } from '@/lib/store/authSlice'
-import { useDispatch, useSelector } from 'react-redux'
-
+import { setToken, setUser } from '@/lib/store/authSlice'
+import { useDispatch } from 'react-redux'
 import {useEffect, useState} from 'react'
-import { useRouter } from 'next/navigation'
 
 export function useAuth() {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const dispatch = useDispatch()
-    const router = useRouter()
     const [auth, setAuth] = useState({
         user: {
             id: null

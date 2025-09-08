@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { Check, Star, Zap } from "lucide-react"
+import { Input } from "../ui/input"
+import { useState } from "react"
 
 interface PricingPlan {
   id: string
@@ -20,12 +22,23 @@ interface PricingPlan {
 
 interface PricingCardProps {
   plan: PricingPlan
-  onSubscribe: (planId: string) => void
+  onSubscribe: (planId: string, price: number) => void
   isLoading?: boolean
 }
 
 export function PricingCard({ plan, onSubscribe, isLoading }: PricingCardProps) {
+  const [payAsYouGoPrice, setPayAsYouGoPrice] = useState(10)
   const discount = plan.originalPrice ? Math.round(((plan.originalPrice - plan.price) / plan.originalPrice) * 100) : 0
+
+  const handlePriceChange = (type: 'increment' | 'decrement') => {
+    if (type === 'increment') {
+      setPayAsYouGoPrice(payAsYouGoPrice + 1)
+    } 
+    if (type === 'decrement') {
+      if(payAsYouGoPrice <= 10) return
+      setPayAsYouGoPrice(payAsYouGoPrice - 1)
+    }
+  }
 
   return (
     <div
@@ -57,8 +70,15 @@ export function PricingCard({ plan, onSubscribe, isLoading }: PricingCardProps) 
 
         <div className="flex items-baseline justify-center gap-2 mb-2">
           {plan.originalPrice && <span className="text-white/50 line-through text-lg">${plan.originalPrice}</span>}
-          <span className="text-4xl font-bold gradient-text">${plan.price}</span>
-          <span className="text-white/70">/{plan.period}</span>
+          {plan.id == 'pay as you go' && (
+            <div className="grid grid-cols-5">
+              <Button className="col-span-1" onClick={() => handlePriceChange('decrement')}> - </Button>
+              <Input type="number" value={payAsYouGoPrice} min={10} className="col-span-3"/>
+              <Button className="col-span-1" onClick={() => handlePriceChange('increment')}>+</Button>
+            </div>
+          )}
+          {plan.price && <><span className="text-4xl font-bold gradient-text">${plan.price}</span>
+          <span className="text-white/70">/{plan.period}</span></>}
         </div>
 
         {discount > 0 && (
@@ -69,7 +89,7 @@ export function PricingCard({ plan, onSubscribe, isLoading }: PricingCardProps) 
       </div>
 
       <Button
-        onClick={() => onSubscribe(plan.id)}
+        onClick={() => onSubscribe(plan.id, payAsYouGoPrice)}
         disabled={isLoading}
         className={`w-full mb-6 transition-all duration-300 ${
           plan.buttonVariant === "default"

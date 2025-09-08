@@ -1,36 +1,46 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { PricingCard } from "@/components/pricing/pricing-card"
-import { PricingToggle } from "@/components/pricing/pricing-toggle"
+// import { PricingToggle } from "@/components/pricing/pricing-toggle"
 import { FAQSection } from "@/components/pricing/faq-section"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, MessageCircle } from "lucide-react"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { getPricing } from "@/lib/actions/client"
+import { getBillingUrl, getPricing } from "@/lib/actions/client"
+import { useSelector } from "react-redux"
+import { authSelector } from "@/lib/store/authSlice"
+import { toast } from "sonner"
 
 export default function PricingPage() {
-  const [isYearly, setIsYearly] = useState(false)
-  const {data, isLoading, isError, isSuccess} = useQuery({
+  const {data, isSuccess} = useQuery({
     queryKey: ['plans'],
     queryFn: getPricing
   })
+  const user = useSelector(authSelector)
   const {mutate, isPending} = useMutation({
     mutationKey: ['subscribe'],
-    mutationFn: async () => {},
-    onError: () => {},
-    onSuccess: () => {}
+    mutationFn: ({planId, price}: {planId: string; price: number}) => getBillingUrl({planId, price, user}),
+    onError: (err: any) => {
+      toast('Error', {
+        description: err.response.data.message,
+        style: {
+          background: "red",
+          border: '1px solid red',
+          color: 'white'
+        }
+      }) 
+    },
+    onSuccess: (res: any) => {
+      window.location.href = res.data.url
+    }
   })
 
-  // const plans = data && isYearly ? data.yearly : data.monthly
-
-  const handleSubscribe = async (planId: string) => {
-    console.log('Finish')
-    // mutate({})
-
+  const handleSubscribe = (planId: string, price: number) => {
+    console.log(planId, price)
+    mutate({planId, price})
   }
 
   return (
@@ -46,12 +56,12 @@ export default function PricingPage() {
               Choose the perfect plan for your creative needs. Start free, upgrade anytime.
             </p>
 
-            <PricingToggle isYearly={isYearly} onToggle={setIsYearly} />
+            {/* <PricingToggle isYearly={isYearly} onToggle={setIsYearly} /> */}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
             {isSuccess && data.plans.map((plan: any) => (
-              <PricingCard key={plan.id} plan={plan} onSubscribe={handleSubscribe} isLoading={true} />
+              <PricingCard key={plan.id} plan={plan} onSubscribe={handleSubscribe} isLoading={isPending} />
             ))}
           </div>
 

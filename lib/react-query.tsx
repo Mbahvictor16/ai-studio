@@ -24,6 +24,7 @@ export function ReactQueryProvider({ children }: { children: React.ReactNode }) 
         queryCache: new QueryCache({
           onError: (err: any) => {
             if (err.response.status == 403) {
+              localStorage.clear()
               router.push('/')
             }
           }
@@ -31,6 +32,7 @@ export function ReactQueryProvider({ children }: { children: React.ReactNode }) 
         mutationCache: new MutationCache({
           onError: (err: any) => {
             if (err.response.status == 403) {
+              localStorage.clear()
               router.push('/')
             }
           }

@@ -7,6 +7,8 @@ const noInterceptor = axios.create({
     withCredentials: true
 })
 
+const controller = new AbortController()
+
 export async function refresh(token: string) {
     const res = await api.post('/auth/token', { token })
     if (!res.data) {
@@ -16,7 +18,7 @@ export async function refresh(token: string) {
 }
 
 export async function loginUser({ email, password }: { email: string, password: string }) {
-    const res = await noInterceptor.post('/auth/login', { email, password })
+    const res = await noInterceptor.post('/auth/login', { email, password }, {signal: controller.signal})
     if (!res.data) {
         return Promise.reject(res)
     }
@@ -24,7 +26,7 @@ export async function loginUser({ email, password }: { email: string, password: 
 }
 
 export async function signupUser(data: Record<string, string>) {
-    const res = await noInterceptor.post('/users/create', { ...data })
+const res = await noInterceptor.post('/users/create', { ...data }, {signal: controller.signal})
     if (!res.data) {
         return Promise.reject(res)
     }
@@ -33,7 +35,6 @@ export async function signupUser(data: Record<string, string>) {
 
 
 export async function getUser(id: string) {
-    const controller = new AbortController()
     const response = await withAxios(api.get(`/users/${id}`, { signal: controller.signal }))
     if (!response.data) {
         return Promise.reject(response)
@@ -43,7 +44,6 @@ export async function getUser(id: string) {
 }
 
 export async function generateVideo({ image, prompt }: { image: string; prompt: string }) {
-    const controller = new AbortController()
     const response = await withAxios(() => axios.post('/videos/generate', { image, prompt }, { signal: controller.signal }))
     if (!response.data) {
         return Promise.reject(response)
@@ -52,9 +52,7 @@ export async function generateVideo({ image, prompt }: { image: string; prompt: 
 }
 
 export async function generateImage({ prompt }: { prompt: string }) {
-    const controller = new AbortController()
     const response = await withAxios(api.post('/images/generate', { prompt }, { signal: controller.signal }))
-    console.log()
     if (!response.data) {
         return Promise.reject(response)
     }
@@ -62,11 +60,18 @@ export async function generateImage({ prompt }: { prompt: string }) {
 }
 
 export async function getPricing() {
-    const controller = new AbortController()
-    const response = await axios.get('/plans/pricing', { signal: controller.signal })
+    const response = await noInterceptor.get('/plans/pricing', { signal: controller.signal })
     if (!response.data) {
         return Promise.reject(response)
     }
     return response.data.data
+}
+
+export async function getBillingUrl({planId, price, user}: {planId: string; price: number; user: Record<any, any>|null}) {
+    const response = await withAxios(api.post('/plans/subscribe', {planId, price, user}, {signal: controller.signal}))
+    if(!response.data) {
+        return Promise.reject(response)
+    }
+    return response.data
 }
 

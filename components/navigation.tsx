@@ -4,12 +4,10 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Menu, X } from "lucide-react"
-import { useQuery } from "@tanstack/react-query"
-import { getUser } from "@/lib/actions/client"
 import Profile from "./auth/profile"
-import { useAuth } from "@/hooks/use-auth"
+import { useUserProfile } from "@/hooks/use-user"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -21,13 +19,7 @@ const navigation = [
 export function Navigation() {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const {isAuthenticated, auth} = useAuth()
-  const {isSuccess, isFetched, isPending, data,} = useQuery({
-    queryKey: ['user', auth.user],
-    queryFn: () => getUser(auth.user.id!),
-    retry: 2,
-    enabled: !!isAuthenticated
-  })
+  const {isSuccess, isFetched, isPending, data} = useUserProfile()
 
 
   return (
@@ -91,7 +83,7 @@ export function Navigation() {
           </Link>
 
           <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2">
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isMobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
           </Button>
         </div>
 
