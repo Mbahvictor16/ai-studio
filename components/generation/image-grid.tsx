@@ -103,7 +103,7 @@ export function ImageGrid({ images, isLoading, onLike, onDownload, onShare }: Im
                       size="sm"
                       variant="ghost"
                       className="w-8 h-8 p-0 hover:bg-white/10"
-                      // onClick={() => onDownload(image.id)}
+                      onClick={() => onDownload(image.id)}
                     >
                       <Download className="w-4 h-4 text-white/60" />
                     </Button>

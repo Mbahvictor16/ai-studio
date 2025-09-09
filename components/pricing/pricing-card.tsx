@@ -71,10 +71,10 @@ export function PricingCard({ plan, onSubscribe, isLoading }: PricingCardProps) 
         <div className="flex items-baseline justify-center gap-2 mb-2">
           {plan.originalPrice && <span className="text-white/50 line-through text-lg">${plan.originalPrice}</span>}
           {plan.id == 'pay as you go' && (
-            <div className="grid grid-cols-5">
-              <Button className="col-span-1" onClick={() => handlePriceChange('decrement')}> - </Button>
-              <Input type="number" value={payAsYouGoPrice} min={10} className="col-span-3"/>
-              <Button className="col-span-1" onClick={() => handlePriceChange('increment')}>+</Button>
+            <div className="grid grid-cols-4 gap-2 items-center">
+              <Button className="col-span-1 bg-gradient-to-r from-violet-500 to-purple-600" onClick={() => handlePriceChange('decrement')}> - </Button>
+              <Input type="number" value={payAsYouGoPrice} min={10} className="col-span-2 text-white border-white text-center"/>
+              <Button className="col-span-1 bg-gradient-to-r from-violet-500 to-purple-600" onClick={() => handlePriceChange('increment')}>+</Button>
             </div>
           )}
           {plan.price && <><span className="text-4xl font-bold gradient-text">${plan.price}</span>

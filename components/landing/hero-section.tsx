@@ -9,12 +9,12 @@ export function HeroSection() {
     <section className="relative py-20 md:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <div className="animate-float mb-8">
+          {/* <div className="animate-float mb-8">
             <div className="inline-flex items-center gap-2 glass-card px-4 py-2 text-sm">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
               <span className="text-white/80">AI Models Online</span>
             </div>
-          </div>
+          </div> */}
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-6 leading-tight">
             <span className="gradient-text">Create with AI</span>

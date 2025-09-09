@@ -53,8 +53,14 @@ export default function ImagesPage() {
     if (image) {
       // Create download link
       const link = document.createElement("a")
-      link.href = image.url
-      link.download = `ai-image-${id}.png`
+      const byte = atob(image.url)
+      const array = []
+      for (let i = 0; i < byte.length; i++) {
+        array.push(byte.charCodeAt(i))
+      }
+      const blob = new Blob([new Uint8Array(array)], {type: "image/jpeg"})
+      link.href = URL.createObjectURL(blob)
+      link.download = `ai-image-${id}.jpg`
       link.click()
     }
   }
