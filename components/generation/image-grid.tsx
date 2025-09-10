@@ -67,7 +67,7 @@ export function ImageGrid({ images, isLoading, onLike, onDownload, onShare }: Im
                     size="sm"
                     variant="ghost"
                     className="w-8 h-8 p-0 bg-black/50 hover:bg-black/70"
-                    // onClick={() => setSelectedImage(image.id)}
+                    onClick={() => setSelectedImage(image.id)}
                   >
                     <Maximize2 className="w-4 h-4 text-white" />
                   </Button>
@@ -83,7 +83,7 @@ export function ImageGrid({ images, isLoading, onLike, onDownload, onShare }: Im
                       size="sm"
                       variant="ghost"
                       className="w-8 h-8 p-0 hover:bg-white/10"
-                      // onClick={() => onLike(image.id)}
+                      onClick={() => onLike(image.id)}
                     >
                       <Heart
                         className={`w-4 h-4 ${
@@ -95,7 +95,7 @@ export function ImageGrid({ images, isLoading, onLike, onDownload, onShare }: Im
                       size="sm"
                       variant="ghost"
                       className="w-8 h-8 p-0 hover:bg-white/10"
-                      // onClick={() => onShare(image.id)}
+                      onClick={() => onShare(image.id)}
                     >
                       <Share2 className="w-4 h-4 text-white/60" />
                     </Button>

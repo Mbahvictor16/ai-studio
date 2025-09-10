@@ -39,8 +39,7 @@ export default function PricingPage() {
   })
 
   const handleSubscribe = (planId: string, price: number) => {
-    if(planId = 'free') return
-
+    if(planId == 'free') return
     mutate({planId, price})
   }
 
