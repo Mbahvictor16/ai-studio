@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Check, Star, Zap } from "lucide-react"
 import { Input } from "../ui/input"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 
 interface PricingPlan {
   id: string
@@ -27,7 +27,7 @@ interface PricingCardProps {
 }
 
 export function PricingCard({ plan, onSubscribe, isLoading }: PricingCardProps) {
-  const [payAsYouGoPrice, setPayAsYouGoPrice] = useState(10)
+  const [payAsYouGoPrice, setPayAsYouGoPrice] = useState(15)
   const discount = plan.originalPrice ? Math.round(((plan.originalPrice - plan.price) / plan.originalPrice) * 100) : 0
 
   const handlePriceChange = (type: 'increment' | 'decrement') => {
@@ -35,9 +35,14 @@ export function PricingCard({ plan, onSubscribe, isLoading }: PricingCardProps) 
       setPayAsYouGoPrice(payAsYouGoPrice + 1)
     } 
     if (type === 'decrement') {
-      if(payAsYouGoPrice <= 10) return
+      if(payAsYouGoPrice <= 15) return
       setPayAsYouGoPrice(payAsYouGoPrice - 1)
     }
+  }
+
+  function changeInputPrice(e: ChangeEvent<HTMLInputElement>) {
+    if(e.target.valueAsNumber <= 15) return
+    setPayAsYouGoPrice(e.target.valueAsNumber)
   }
 
   return (
@@ -73,7 +78,7 @@ export function PricingCard({ plan, onSubscribe, isLoading }: PricingCardProps) 
           {plan.id == 'pay as you go' && (
             <div className="grid grid-cols-4 gap-2 items-center">
               <Button className="col-span-1 bg-gradient-to-r from-violet-500 to-purple-600" onClick={() => handlePriceChange('decrement')}> - </Button>
-              <Input type="number" value={payAsYouGoPrice} min={10} className="col-span-2 text-white border-white text-center"/>
+              <Input type="number" value={payAsYouGoPrice} min={10} className="col-span-2 text-white border-white text-center" onChange={changeInputPrice}/>
               <Button className="col-span-1 bg-gradient-to-r from-violet-500 to-purple-600" onClick={() => handlePriceChange('increment')}>+</Button>
             </div>
           )}

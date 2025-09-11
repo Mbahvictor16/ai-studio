@@ -42,9 +42,9 @@ export function HeroSection() {
             <Button
               variant="ghost"
               size="lg"
-              className="glass-card px-8 py-4 text-lg font-semibold hover:bg-white/10 transition-all duration-300 group"
+              className="glass-card px-8 py-4 text-lg font-semibold hover:bg-white/10 transition-all duration-300 group text-white hover:text-white"
             >
-              <Play className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+              <Play className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform text-white" />
               Watch Demo
             </Button>
           </div>
