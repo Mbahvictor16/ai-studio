@@ -6,25 +6,25 @@ import { Play, Pause, Download, Heart, Share2, Volume2, VolumeX, Maximize2 } fro
 import { VideoPlayerSkeleton } from "@/components/ui/loading-skeleton"
 import { ErrorBoundary } from "@/components/ui/error-boundary"
 
-interface GeneratedVideo {
-  id: string
-  url: string
-  thumbnail: string
-  prompt: string
-  duration: number
-  timestamp: Date
-  liked: boolean
-}
+// interface GeneratedVideo {
+//   id: string
+//   url: string
+//   thumbnail: string
+//   prompt: string
+//   duration: number
+//   timestamp: Date
+//   liked: boolean
+// }
 
 interface VideoPlayerProps {
-  videos: GeneratedVideo[]
+  videos: string[]
   isLoading: boolean
-  onLike: (id: string) => void
-  onDownload: (id: string) => void
-  onShare: (id: string) => void
+  // onLike: (id: string) => void
+  onDownload: () => void
+  // onShare: (id: string) => void
 }
 
-export function VideoPlayer({ videos, isLoading, onLike, onDownload, onShare }: VideoPlayerProps) {
+export function VideoPlayer({ videos, isLoading, onDownload }: VideoPlayerProps) {
   const [playingVideo, setPlayingVideo] = useState<string | null>(null)
   const [mutedVideos, setMutedVideos] = useState<Set<string>>(new Set())
   const videoRefs = useRef<Record<string, HTMLVideoElement>>({})
@@ -87,18 +87,18 @@ export function VideoPlayer({ videos, isLoading, onLike, onDownload, onShare }: 
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {videos.map((video) => (
-            <div key={video.id} className="glass-card p-4 group hover:bg-white/10 transition-all duration-300">
+          {videos.map((video, id) => (
+            <div key={id} className="glass-card p-4 group hover:bg-white/10 transition-all duration-300">
               <div className="relative aspect-video rounded-lg overflow-hidden mb-4">
                 <video
                   ref={(el) => {
-                    if (el) videoRefs.current[video.id] = el
+                    if (el) videoRefs.current[video] = el
                   }}
-                  src={video.url}
-                  poster={video.thumbnail}
+                  src={video}
+                  // poster={video.thumbnail}
                   className="w-full h-full object-cover"
                   onEnded={() => setPlayingVideo(null)}
-                  muted={mutedVideos.has(video.id)}
+                  // muted={mutedVideos.has(video.id)}
                   preload="metadata"
                 />
 
@@ -109,9 +109,9 @@ export function VideoPlayer({ videos, isLoading, onLike, onDownload, onShare }: 
                     size="lg"
                     variant="ghost"
                     className="w-16 h-16 rounded-full bg-black/50 hover:bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300"
-                    onClick={() => togglePlay(video.id)}
+                    onClick={() => togglePlay(video)}
                   >
-                    {playingVideo === video.id ? (
+                    {playingVideo === video ? (
                       <Pause className="w-8 h-8 text-white" />
                     ) : (
                       <Play className="w-8 h-8 text-white ml-1" />
@@ -125,17 +125,17 @@ export function VideoPlayer({ videos, isLoading, onLike, onDownload, onShare }: 
                       size="sm"
                       variant="ghost"
                       className="w-8 h-8 p-0 bg-black/50 hover:bg-black/70"
-                      onClick={() => toggleMute(video.id)}
+                      onClick={() => toggleMute(video)}
                     >
-                      {mutedVideos.has(video.id) ? (
+                      {mutedVideos.has(video) ? (
                         <VolumeX className="w-4 h-4 text-white" />
                       ) : (
                         <Volume2 className="w-4 h-4 text-white" />
                       )}
                     </Button>
-                    <span className="text-xs text-white bg-black/50 px-2 py-1 rounded">
+                    {/* <span className="text-xs text-white bg-black/50 px-2 py-1 rounded">
                       {Math.floor(video.duration / 60)}:{(video.duration % 60).toString().padStart(2, "0")}
-                    </span>
+                    </span> */}
                   </div>
 
                   <Button size="sm" variant="ghost" className="w-8 h-8 p-0 bg-black/50 hover:bg-black/70">
@@ -145,11 +145,11 @@ export function VideoPlayer({ videos, isLoading, onLike, onDownload, onShare }: 
               </div>
 
               <div className="space-y-3">
-                <p className="text-sm text-white/80 line-clamp-2">{video.prompt}</p>
+                {/* <p className="text-sm text-white/80 line-clamp-2">{video.prompt}</p> */}
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-white/50">{video.timestamp.toLocaleDateString()}</span>
+                  {/* <span className="text-xs text-white/50">{video.timestamp.toLocaleDateString()}</span> */}
                   <div className="flex items-center gap-1">
-                    <Button
+                    {/* <Button
                       size="sm"
                       variant="ghost"
                       className="w-8 h-8 p-0 hover:bg-white/10"
@@ -160,20 +160,20 @@ export function VideoPlayer({ videos, isLoading, onLike, onDownload, onShare }: 
                           video.liked ? "fill-red-500 text-red-500" : "text-white/60"
                         } transition-colors`}
                       />
-                    </Button>
-                    <Button
+                    </Button> */}
+                    {/* <Button
                       size="sm"
                       variant="ghost"
                       className="w-8 h-8 p-0 hover:bg-white/10"
                       onClick={() => onShare(video.id)}
                     >
                       <Share2 className="w-4 h-4 text-white/60" />
-                    </Button>
+                    </Button> */}
                     <Button
                       size="sm"
                       variant="ghost"
                       className="w-8 h-8 p-0 hover:bg-white/10"
-                      onClick={() => onDownload(video.id)}
+                      onClick={() => onDownload()}
                     >
                       <Download className="w-4 h-4 text-white/60" />
                     </Button>

@@ -4,6 +4,8 @@ import { useState } from "react"
 import { Navigation } from "@/components/navigation"
 import { PromptInput } from "@/components/generation/prompt-input"
 import { VideoPlayer } from "@/components/generation/video-player"
+import { useMutation } from "@tanstack/react-query"
+import { generateVideo } from "@/lib/actions/client"
 
 interface GeneratedVideo {
   id: string
@@ -16,55 +18,50 @@ interface GeneratedVideo {
 }
 
 export default function VideosPage() {
-  const [videos, setVideos] = useState<GeneratedVideo[]>([])
-  const [isGenerating, setIsGenerating] = useState(false)
+  const [videos, setVideos] = useState<string[]>([])
+  const {mutate, isPending} = useMutation({
+    mutationFn: ({prompt, imagePrompt}: {prompt: string; imagePrompt: string}) => generateVideo({ image: imagePrompt, prompt}),
+    onSuccess: (response) => {
+      setVideos(response.data)
+      console.log(response.data.video)
+    },
+    onError: () => {
 
-  const handleGenerate = async (prompt: string, settings: any) => {
-    setIsGenerating(true)
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 5000))
-
-    // Generate mock video
-    const newVideo: GeneratedVideo = {
-      id: `vid-${Date.now()}`,
-      url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      thumbnail: `/placeholder.svg?height=360&width=640&query=${encodeURIComponent(prompt)}`,
-      prompt,
-      duration: 30,
-      timestamp: new Date(),
-      liked: false,
     }
+  })
 
-    setVideos((prev) => [newVideo, ...prev])
-    setIsGenerating(false)
+  const handleGenerate = async (prompt: string) => {
+    mutate({
+      prompt,
+      imagePrompt: "",
+    })
+
   }
 
-  const handleLike = (id: string) => {
-    setVideos((prev) => prev.map((vid) => (vid.id === id ? { ...vid, liked: !vid.liked } : vid)))
-  }
+  // const handleLike = (id: string) => {
+  //   setVideos((prev) => prev.map((vid) => (vid.id === id ? { ...vid, liked: !vid.liked } : vid)))
+  // }
 
-  const handleDownload = (id: string) => {
-    const video = videos.find((vid) => vid.id === id)
-    if (video) {
+  const handleDownload = () => {
+    if (videos.length > 0) {
       // Create download link
       const link = document.createElement("a")
-      link.href = video.url
-      link.download = `ai-video-${id}.mp4`
+      link.href = videos[0]
+      link.download = `ai-video-${Date.now()}.mp4`
       link.click()
     }
   }
 
-  const handleShare = (id: string) => {
-    const video = videos.find((vid) => vid.id === id)
-    if (video && navigator.share) {
-      navigator.share({
-        title: "AI Generated Video",
-        text: video.prompt,
-        url: video.url,
-      })
-    }
-  }
+  // const handleShare = (id: string) => {
+  //   const video = videos.find((vid) => vid.id === id)
+  //   if (video && navigator.share) {
+  //     navigator.share({
+  //       title: "AI Generated Video",
+  //       text: video.prompt,
+  //       url: video.url,
+  //     })
+  //   }
+  // }
 
   return (
     <div className="min-h-screen">
@@ -84,7 +81,7 @@ export default function VideosPage() {
             <div className="lg:col-span-1">
               <PromptInput
                 onGenerate={handleGenerate}
-                isGenerating={isGenerating}
+                isGenerating={isPending}
                 placeholder="Describe the video you want to create... e.g., 'A time-lapse of a flower blooming in a garden with morning sunlight filtering through leaves'"
                 type="video"
               />
@@ -93,10 +90,10 @@ export default function VideosPage() {
             <div className="lg:col-span-2">
               <VideoPlayer
                 videos={videos}
-                isLoading={isGenerating}
-                onLike={handleLike}
+                isLoading={isPending}
+                // onLike={handleLike}
                 onDownload={handleDownload}
-                onShare={handleShare}
+                // onShare={handleShare}
               />
             </div>
           </div>

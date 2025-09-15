@@ -44,10 +44,11 @@ export async function getUser(id: string) {
 }
 
 export async function generateVideo({ image, prompt }: { image: string; prompt: string }) {
-    const response = await withAxios(() => axios.post('/videos/generate', { image, prompt }, { signal: controller.signal }))
+    const response = await withAxios(api.post('/videos/generate', { image, prompt }, { signal: controller.signal }))
     if (!response.data) {
         return Promise.reject(response)
     }
+    console.log(response.data)
     return response.data
 }
 
