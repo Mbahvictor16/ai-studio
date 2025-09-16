@@ -30,12 +30,12 @@ export default function ImagesPage() {
     },
     onSuccess: (response) => {
       setImages(response.data.images)
-      toast('Success', {
-        description: 'Image generated successfully',
+      toast('Image generated successfully', {
         duration: 3000,
         style: {
-          background: '#00ff00',
-          color: 'white'
+          background: '#115f16',
+          color: 'white',
+          fontWeight: 'bolder'
         }
       })
     },
