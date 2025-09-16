@@ -7,6 +7,7 @@ import { ImageGrid } from "@/components/generation/image-grid"
 import { useMutation } from "@tanstack/react-query"
 import { generateImage } from "@/lib/actions/client"
 import { set } from "date-fns"
+import { toast } from "sonner"
 
 interface GeneratedImage {
   id: string
@@ -29,10 +30,20 @@ export default function ImagesPage() {
     },
     onSuccess: (response) => {
       setImages(response.data.images)
-      console.log(response.data.images)
+      toast('Success', {
+        description: 'Image generated successfully',
+        duration: 3000,
+        style: {
+          background: '#00ff00',
+          color: 'white'
+        }
+      })
     },
     onError: () => {
-
+      toast('Error', {
+        description: 'Failed to generate image',
+        duration: 3000,
+      })
     }
 
   })

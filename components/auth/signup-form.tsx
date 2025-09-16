@@ -68,7 +68,7 @@ export function SignupForm() {
     return Object.keys(newErrors).length === 0
   }
 
-  const { isError, isPending, mutate, data } = useMutation({
+  const { isError, isPending, mutate } = useMutation({
     mutationFn: (formData: Record<string, string>) => signupUser(formData),
     onSuccess: (response: any) => {
       dispatch(setAuth(response.data))
