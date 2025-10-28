@@ -26,120 +26,16 @@ export function Navigation() {
 
   return (
     <>
-      {/* <nav className="glass-card fixed top-4 left-1/2 transform -translate-x-1/2 z-50 hidden md:block">
-        <div className="flex items-center gap-1 p-1">
-          <Link href="/" className="flex items-center gap-2 px-3 py-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-cyan-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">AI</span>
-            </div>
-            <span className="font-display font-bold text-lg gradient-text">Studio</span>
-          </Link>
-
-          <div className="flex items-center gap-1 ml-4">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                  pathname === item.href ? "bg-white/10 text-white" : "text-white/70 hover:text-white hover:bg-white/5",
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2 ml-4 pl-4 border-l border-white/10">
-            {isSuccess && isFetched ? (
-                <Profile user={data.user} />
-              ) : (
-                <>
-                    <Button variant="ghost" size="sm" className="flex-1 text-white" asChild>
-                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                      Login
-                    </Link>
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="flex-1 bg-gradient-to-r from-violet-500 to-cyan-500 hover:from-violet-600 hover:to-cyan-600"
-                    asChild
-                  >
-                    <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
-                      Sign Up
-                    </Link>
-                  </Button>
-                </>
-              )}
-          </div>
-        </div>
-      </nav>
-
-      <nav className="md:hidden fixed top-4 left-4 right-4 z-50">
-        <div className="glass-card p-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-cyan-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">AI</span>
-            </div>
-            <span className="font-display font-bold text-lg gradient-text">Studio</span>
-          </Link>
-
-          <Button variant="ghost" size="sm" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2">
-            {isMobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
-          </Button>
-        </div>
-
-        {isMobileMenuOpen && (
-          <div className="glass-card mt-2 p-4 space-y-2">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={cn(
-                  "block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
-                  pathname === item.href ? "bg-white/10 text-white" : "text-white/70 hover:text-white hover:bg-white/5",
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <div className="border-t border-white/10 pt-2 mt-4 flex gap-2">
-              {isSuccess && isFetched ? (
-                <Profile user={data.user} />
-              ) : (
-                <>
-                    <Button variant="ghost" size="sm" className="flex-1 text-white" asChild>
-                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                      Login
-                    </Link>
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="flex-1 bg-gradient-to-r from-violet-500 to-cyan-500 hover:from-violet-600 hover:to-cyan-600"
-                    asChild
-                  >
-                    <Link href="/signup" onClick={() => setIsMobileMenuOpen(false)}>
-                      Sign Up
-                    </Link>
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
-        )}
-      </nav> */}
-
       <header className="flex md:block items-center justify-between relative glass-card z-50 text-white">
         <div className="md:flex items-center justify-between">
           <FullLogo />
 
           <nav className="hidden md:flex gap-8 text-xs md:text-sm">
-            <ul className="flex gap-1">
+            <ul className="flex">
               {navigation.map(link => {
                 return (
                   <li className="list-none" key={link.name}>
-                    <Link href={link.href} className="flex gap-1 items-center hover:bg-white/10 px-4 py-1 rounded-full">{link.icon} {link.name}{link.beta && <sub className="p-2 text-[8px] bg-white/10 rounded-full">BETA</sub>}</Link>
+                    <Link href={link.href} className="flex gap-1 items-center hover:bg-white/10 px-4 py-1 rounded-full">{link.icon} {link.name}{link.beta && <sub className="p-2 text-[8px] bg-[#ffa600] rounded-full">Coming soon</sub>}</Link>
                   </li>
                 )
               })}
@@ -170,14 +66,14 @@ export function Navigation() {
               {navigation.map(link => {
                 return (
                   <li className="list-none mb-8" key={link.name}>
-                    <Link href={link.href} className="flex gap-1 items-center hover:bg-white/10 px-4 py-1 rounded-full">{link.icon} {link.name}{link.beta && <sub className="p-2 text-[8px] bg-white/10 rounded-full">BETA</sub>}</Link>
+                    <Link href={link.href} className="flex gap-1 items-center hover:bg-white/10 px-4 py-1 rounded-xl">{link.icon} {link.name}{link.beta && <sub className="p-2 text-[8px] bg-[#ffa600] rounded-full">Coming soon</sub>}</Link>
                   </li>
                 )
               })}
 
               {isFetched && isSuccess && (
                 <li className="mb-8">
-                  <Link href={'/pricing'} className="flex items-center gap-1">
+                  <Link href={'/pricing'} className="flex items-center gap-1 hover:bg-white/10 px-4 py-1 rounded-xl">
                     <Gem size={12} />
                     Pricing
                   </Link>
