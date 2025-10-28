@@ -1,11 +1,12 @@
 import Link from "next/link"
+import { FullLogo } from "./logo"
 
 const footerLinks = {
   product: [
     { name: "Image Generation", href: "/images" },
     { name: "Video Generation", href: "/videos" },
+    { name: "Audio Generation", href: "/audios" },
     { name: "Pricing", href: "/pricing" },
-    { name: "API", href: "/api" },
   ],
   company: [
     { name: "About", href: "/about" },
@@ -34,10 +35,7 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">AI</span>
-              </div>
-              <span className="font-display font-bold text-lg gradient-text">Studio</span>
+              <FullLogo />
             </div>
             <p className="text-white/60 text-sm leading-relaxed">
               Create stunning images and videos with the power of AI. Transform your ideas into visual reality.
@@ -64,7 +62,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-white/60 text-sm">© 2024 AI Studio. All rights reserved.</p>
+          <p className="text-white/60 text-sm">© 2024 Butterfly. All rights reserved.</p>
           <div className="flex items-center gap-6 mt-4 sm:mt-0">
             <Link href="#" className="text-white/60 hover:text-white transition-colors duration-200">
               <span className="sr-only">Twitter</span>

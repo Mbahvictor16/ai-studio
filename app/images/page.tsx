@@ -30,7 +30,7 @@ export default function ImagesPage() {
     },
     onSuccess: (response) => {
       setImages(response.data.images)
-      toast('Image generated successfully', {
+      toast(response.data.message, {
         duration: 3000,
         style: {
           background: '#115f16',
@@ -49,7 +49,6 @@ export default function ImagesPage() {
   })
 
   const handleGenerate = (prompt: string) => {
-    console.log('Generating')
     mutate({
       prompt
     })

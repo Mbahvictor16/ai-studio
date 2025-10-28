@@ -4,14 +4,18 @@ import { HeroSection } from "@/components/landing/hero-section"
 import { FeaturesSection } from "@/components/landing/features-section"
 import { TestimonialsSection } from "@/components/landing/testimonials-section"
 import { CTASection } from "@/components/landing/cta-section"
+import { InfiniteScroll } from "@/components/landing/infinite-scroll"
+import { VideoCard } from "@/components/landing/video-card"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative z-10">
       <Navigation />
-      <main className="pt-24">
+      <main className="pt-8">
         <HeroSection />
-        <FeaturesSection />
+        {/* <FeaturesSection /> */}
+        <InfiniteScroll />
+        <VideoCard />
         <TestimonialsSection />
         <CTASection />
       </main>

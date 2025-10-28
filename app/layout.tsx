@@ -19,9 +19,11 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  title: "AI Studio - Generate Images & Videos",
+  title: "Butterfly",
   description: "Modern AI-powered platform for generating stunning images and videos from text prompts",
-  generator: "v0.app",
+  icons: {
+    icon: 'Butterfly-logo.jpg'
+  }
 }
 
 export default function RootLayout({
