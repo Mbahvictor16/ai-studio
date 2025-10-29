@@ -6,6 +6,7 @@ import { TestimonialsSection } from "@/components/landing/testimonials-section"
 import { CTASection } from "@/components/landing/cta-section"
 import { InfiniteScroll } from "@/components/landing/infinite-scroll"
 import { VideoCard } from "@/components/landing/video-card"
+import { MarqueeImages } from "@/components/landing/marquee-images"
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
         {/* <FeaturesSection /> */}
         <InfiniteScroll />
         <VideoCard />
+        <MarqueeImages />
         <TestimonialsSection />
         <CTASection />
       </main>

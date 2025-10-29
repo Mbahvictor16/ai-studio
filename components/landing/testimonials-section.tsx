@@ -6,7 +6,7 @@ const testimonials = [
     role: "Creative Director",
     company: "Design Studio Pro",
     content:
-      "AI Studio has revolutionized our creative workflow. We can now prototype visual concepts in minutes instead of hours. The quality is absolutely stunning.",
+      "Butterfly has revolutionized our creative workflow. We can now prototype visual concepts in minutes instead of hours. The quality is absolutely stunning.",
     rating: 5,
     avatar: "/professional-woman-dark-hair.png",
   },
@@ -24,7 +24,7 @@ const testimonials = [
     role: "Freelance Artist",
     company: "Independent",
     content:
-      "As a freelancer, AI Studio gives me superpowers. I can take on more projects and deliver incredible results that wow my clients every time.",
+      "As a freelancer, Butterfly gives me superpowers. I can take on more projects and deliver incredible results that wow my clients every time.",
     rating: 5,
     avatar: "/young-woman-curly-hair.png",
   },
@@ -42,7 +42,7 @@ const testimonials = [
     role: "Content Creator",
     company: "Social Media Agency",
     content:
-      "I create content for 50+ brands and AI Studio helps me maintain consistency while exploring new creative directions. It's absolutely essential.",
+      "I create content for 50+ brands and Butterfly helps me maintain consistency while exploring new creative directions. It's absolutely essential.",
     rating: 5,
     avatar: "/blonde-woman-smiling.png",
   },
@@ -62,11 +62,11 @@ export function TestimonialsSection() {
     <section className="py-20 md:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-display font-bold mb-6">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
             <span className="gradient-text">Loved by Creators</span>
           </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-            Join thousands of creators, designers, and businesses who trust AI Studio for their creative needs
+          <p className="text-md md:text-lg text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Join thousands of creators, designers, and businesses who trust Butterfly for their creative needs
           </p>
         </div>
 
@@ -94,7 +94,7 @@ export function TestimonialsSection() {
                 <div>
                   <h4 className="font-semibold text-white">{testimonial.name}</h4>
                   <p className="text-sm text-white/60">
-                    {testimonial.role} at {testimonial.company}
+                    {testimonial.role}
                   </p>
                 </div>
               </div>
