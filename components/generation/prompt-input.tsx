@@ -56,8 +56,14 @@ export function PromptInput({ onGenerate, isGenerating, placeholder, type }: Pro
     {name: 'Veo 3 Fast', value: 'veo3-fast-preview', label: 'GoogleAI'}
   ]
 
-  function selectModel(value: string) {
+  function selectImageModel(value: string) {
     const model = imageModelOptions.find(model => model.value == value)
+    setOptions({model: model!})
+    console.log(model)
+  }
+
+  function selectVideoModel(value: string) {
+    const model = videoModelOptions.find(model => model.value == value)
     setOptions({model: model!})
     console.log(model)
   }
@@ -191,7 +197,7 @@ export function PromptInput({ onGenerate, isGenerating, placeholder, type }: Pro
             {type === "image" && (
               <div className="space-y-2">
                 <label className="text-sm font-medium text-white/90 mb-4">Model</label>
-                <Select disabled={isGenerating} value={options.model.value} onValueChange={(value) => selectModel(value)}>
+                <Select disabled={isGenerating} value={options.model.value} onValueChange={(value) => selectImageModel(value)}>
                   <SelectTrigger className="glass w-full p-2 rounded-lg border border-white/20 focus:border-violet-400 text-white bg-transparent">
                     <SelectValue placeholder={options.model.name} />
                   </SelectTrigger>
@@ -209,7 +215,7 @@ export function PromptInput({ onGenerate, isGenerating, placeholder, type }: Pro
             {type === "video" && (
               <div className="space-y-2">
                 <label className="text-sm font-medium text-white/90 mb-4">Model</label>
-                <Select disabled={isGenerating} value={options.model.value} onValueChange={(value) => selectModel(value)}>
+                <Select disabled={isGenerating} value={options.model.value} onValueChange={(value) => selectVideoModel(value)}>
                   <SelectTrigger className="glass w-full p-2 rounded-lg border border-white/20 focus:border-violet-400 text-white bg-transparent">
                     <SelectValue placeholder={options.model.name} />
                   </SelectTrigger>
