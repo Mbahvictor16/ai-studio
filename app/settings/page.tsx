@@ -72,7 +72,7 @@ export default function SettingsPage() {
               <span className="gradient-text">Settings</span>
             </h1>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              Manage your account, preferences, and AI Studio configuration
+              Manage your account, preferences, and Butterfly configuration
             </p>
           </div>
 

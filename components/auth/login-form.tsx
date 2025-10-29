@@ -81,7 +81,7 @@ export function LoginForm() {
     <div className="glass-card p-8 w-full max-w-md">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-display font-bold gradient-text mb-2">Welcome Back</h1>
-        <p className="text-white/70">Sign in to your AI Studio account</p>
+        <p className="text-white/70">Sign in to your Butterfly account</p>
       </div>
       {isError && <p className="text-red-400 text-sm">{errors.email}</p>}
       <form onSubmit={handleSubmit} className="space-y-6">

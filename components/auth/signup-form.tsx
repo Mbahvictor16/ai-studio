@@ -104,7 +104,7 @@ export function SignupForm() {
     <div className="glass-card p-8 w-full max-w-md">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-display font-bold gradient-text mb-2">Create Account</h1>
-        <p className="text-white/70">Join AI Studio and start creating</p>
+        <p className="text-white/70">Join Butterfly and start creating</p>
       </div>
       <div className="mb-4">{isError}</div>
       <form onSubmit={handleSubmit} className="space-y-6">

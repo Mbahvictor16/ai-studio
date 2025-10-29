@@ -105,7 +105,7 @@ export function ApiSettings() {
       <div className="glass p-4 border border-yellow-500/20 bg-yellow-500/5 rounded-lg">
         <p className="text-yellow-400 text-sm">
           <strong>Important:</strong> Keep your API keys secure and never share them publicly. These keys provide access
-          to your AI Studio account and usage.
+          to your Butterfly account and usage.
         </p>
       </div>
 

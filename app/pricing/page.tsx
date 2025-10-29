@@ -105,7 +105,7 @@ export default function PricingPage() {
               <span className="gradient-text">Ready to Get Started?</span>
             </h2>
             <p className="text-white/80 text-lg mb-8">
-              Join thousands of creators already using AI Studio to bring their ideas to life.
+              Join thousands of creators already using Butterfly to bring their ideas to life.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button

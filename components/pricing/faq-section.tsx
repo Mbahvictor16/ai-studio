@@ -68,7 +68,7 @@ export function FAQSection() {
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
             <span className="gradient-text">Frequently Asked Questions</span>
           </h2>
-          <p className="text-xl text-white/80">Everything you need to know about AI Studio pricing</p>
+          <p className="text-xl text-white/80">Everything you need to know about Butterfly pricing</p>
         </div>
 
         <div className="space-y-4">

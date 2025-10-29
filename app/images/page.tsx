@@ -92,10 +92,10 @@ export default function ImagesPage() {
       <main className="pt-32 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-display font-bold mb-4">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
               <span className="gradient-text">AI Image Generator</span>
             </h1>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+            <p className="text-md md:text-lg text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed">
               Transform your ideas into stunning visuals with cutting-edge AI technology
             </p>
           </div>
